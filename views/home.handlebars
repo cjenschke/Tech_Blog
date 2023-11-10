@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,15 +6,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Blog</title>
-     <link rel="stylesheet" href="/public/css/style.css">
+  <link rel="stylesheet" href="/public/css/style.css">
 </head>
 
 <body>
-  <header>
-    <h1>Tech Blog</h1>
-  </header>
+  {{> header}}
 
-  <section>
+  <section class="container">
     <h2>Latest Blog Posts</h2>
     {{#each posts}}
       <article>
@@ -25,7 +24,9 @@
     {{/each}}
   </section>
 
-  <script src="/pulbic/js/script.js"></script>
+  {{> footer}}
+
+  <script src="/public/js/script.js"></script>
 </body>
 
 </html>

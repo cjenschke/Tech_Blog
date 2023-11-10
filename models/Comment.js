@@ -12,26 +12,26 @@ Comment.init(
   {
     // Define the comment model attributes
     id: {
-      type: Datatypes.INTEGER,
+      type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
       autoIncrement: true,
     },
     text: {
-      type: Datatypes.TEXT,
+      type: DataTypes.TEXT,
       allowNull: false,
     },
     user_id: {
-      type: Datatypes.INTEGER,
+      type: DataTypes.INTEGER,
       references: {
-        model: 'user',
+        model: User,
         key: 'id',
       },
     },
     post_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'post',
+        model: Post,
         key: 'id',
       },
     },
@@ -46,15 +46,15 @@ Comment.init(
 );
 
 // Define associations between models
-Comment.belongsTo(User, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE',
-});
+// Comment.belongsTo(User, {
+//   foreignKey: 'user_id',
+//   onDelete: 'CASCADE',
+// });
 
-Comment.belongsTo(Post, {
-  foreignKey: 'post_id',
-  onDelete: 'CASCADE',
-});
+// Comment.belongsTo(Post, {
+//   foreignKey: 'post_id',
+//   onDelete: 'CASCADE',
+// });
 
 // Export the Comment model
 module.exports = Comment;

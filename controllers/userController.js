@@ -1,5 +1,5 @@
 const { join } = require('path');
-const { User } = require('../db/models');
+const { User } = require('../models');
 const { checkPassword, generateHash } = require('../utility/passwordUtils');
 
 const userController = {

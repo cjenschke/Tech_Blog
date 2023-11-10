@@ -28,7 +28,7 @@ Post.init(
     user_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'user',
+        model: User,
         key: 'id',
       },
     },
@@ -43,15 +43,15 @@ Post.init(
 );
 
 // Create associations with other models, if necessary
-Post.belongsTo(User, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE',
-});
+// Post.belongsTo(User, {
+//   foreignKey: 'user_id',
+//   onDelete: 'CASCADE',
+// });
 
-Post.hasMany(Comment, {
-  foreignKey: 'post_id',
-  onDelete: 'CASCADE',
-});
+// Post.hasMany(Comment, {
+//   foreignKey: 'post_id',
+//   onDelete: 'CASCADE',
+// });
 
 // Export the Post model
 module.exports = Post;

@@ -1,5 +1,5 @@
 // Import necessary dependencies
-const { Post, User, Comment } = require('../db/models');
+const { Post, User, Comment } = require('../models');
 
 const postController = {
   // Display a single blog post with comments
