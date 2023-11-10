@@ -1,5 +1,5 @@
 // Import the necessary dependencies
-const { Model, DataTypes } = require('sequelize');
+const { Model, DataTypes, Sequelize } = require('sequelize');
 const sequelize = require('../config/connection');
 const User = require('./User');
 const Post = require('./Post');
@@ -24,35 +24,41 @@ Comment.init(
     user_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: User,
+        model: 'user',
         key: 'id',
       },
     },
     post_id: {
       type: DataTypes.INTEGER,
       references: {
-        model: Post,
+        model: 'post',
         key: 'id',
       },
     },
   },
   {
     sequelize, // Pass in the sequelize connection
-    timestamps: true, // Enable timestamps for this model
-    freezeTableName: true, // Prevent Sequelize from pluralizing the table name
-    underscored: true, // Use underscores for the field names
     modelName: 'comment', // Set the model name to 'comment'
   }
 );
 
 // Define associations between models
+Comment.associate = (models) => {
+  Comment.belongsTo(models.User, {
+    foreignKey: 'user_Id',
+    as: 'user',
+  });
+};
+
 // Comment.belongsTo(User, {
 //   foreignKey: 'user_id',
+//   as: 'user',
 //   onDelete: 'CASCADE',
 // });
 
 // Comment.belongsTo(Post, {
 //   foreignKey: 'post_id',
+//   as: 'post',
 //   onDelete: 'CASCADE',
 // });
 

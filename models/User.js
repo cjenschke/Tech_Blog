@@ -44,16 +44,26 @@ User.init(
   }
 );
 
-// Create associations with other models, if necessary
-User.hasMany(Post, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE', // Define the behavior on user deletion
-});
+// Create associations with other models.
+User.associate = (models) => {
+  User.hasMany(models.Post, {
+    foreignKey: 'user_id',
+    as: 'posts', // This 'as' is important for eager loading
+  });
+  User.hasMany(models.Comment, {
+    foreignKey: 'user_id',
+    as: 'comments',
+  });
+};
+// User.hasMany(Post, {
+//   foreignKey: 'user_id',
+//   onDelete: 'CASCADE', // Define the behavior on user deletion
+// });
 
-User.hasMany(Comment, {
-  foreignKey: 'user_id',
-  onDelete: 'CASCADE',
-});
+// User.hasMany(Comment, {
+//   foreignKey: 'user_id',
+//   onDelete: 'CASCADE',
+// });
 
 // Export the User model
 module.exports = User;

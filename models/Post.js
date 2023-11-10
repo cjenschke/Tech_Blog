@@ -1,16 +1,12 @@
-// Import the necessary dependencies
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 const User = require('./User');
 const Comment = require('./Comment');
 
-// Define the Post Model
 class Post extends Model {}
 
-// Set up the fields and rules for the Post model
 Post.init(
   {
-    // Define the post model attributes
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -27,31 +23,38 @@ Post.init(
     },
     user_id: {
       type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
       references: {
-        model: User,
+        model: 'user',
         key: 'id',
       },
     },
   },
   {
-    sequelize, // Pass in the sequelize connection
-    timestamps: true, // Enable timestamps for this model
-    freezeTableName: true, // Prevent Sequelize from pluralizing the table name
-    underscored: true, // Use underscores for field names
-    modelName: 'post', // Set the model name to 'post'
+    sequelize,
+    timestamps: true,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'post',
   }
 );
 
-// Create associations with other models, if necessary
-// Post.belongsTo(User, {
-//   foreignKey: 'user_id',
-//   onDelete: 'CASCADE',
-// });
+// Define associations
+Post.associate = (models) => {
+  Post.belongsTo(models.User, {
+    foreignKey: 'user_id',
+    as: 'user',
+  });
 
-// Post.hasMany(Comment, {
-//   foreignKey: 'post_id',
-//   onDelete: 'CASCADE',
-// });
+  // Post.belongsTo(User, {
+  //   foreignKey: 'user_id',
+  //   as: 'author',
+  // });
 
-// Export the Post model
+  Post.hasMany(models.Comment, {
+    foreignKey: 'post_id',
+    as: 'comments',
+  });
+};
 module.exports = Post;
