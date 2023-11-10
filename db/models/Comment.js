@@ -1,6 +1,8 @@
 // Import the necessary dependencies
-const { Model, Datatypes } = require('sequelize');
+const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
+const User = require('./User');
+const Post = require('./Post');
 
 // Define the Comment model
 class Comment extends Model {}
@@ -26,6 +28,13 @@ Comment.init(
         key: 'id',
       },
     },
+    post_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'post',
+        key: 'id',
+      },
+    },
   },
   {
     sequelize, // Pass in the sequelize connection
@@ -35,6 +44,17 @@ Comment.init(
     modelName: 'comment', // Set the model name to 'comment'
   }
 );
+
+// Define associations between models
+Comment.belongsTo(User, {
+  foreignKey: 'user_id',
+  onDelete: 'CASCADE',
+});
+
+Comment.belongsTo(Post, {
+  foreignKey: 'post_id',
+  onDelete: 'CASCADE',
+});
 
 // Export the Comment model
 module.exports = Comment;
