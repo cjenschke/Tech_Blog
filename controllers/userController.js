@@ -17,7 +17,7 @@ const userController = {
       // Check if the email is already registered
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
-        return res.status(400).json({ message: 'Email is already registered' });
+        return res.status(400).json({ error: 'Email is already registered' });
       }
 
       // Hash the user's password before saving it
@@ -37,7 +37,7 @@ const userController = {
         res.status(201).json({ message: 'User registered successfully' });
       });
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   },
 
@@ -55,13 +55,13 @@ const userController = {
       // Check if the email is registered
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return res.status(400).json({ message: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email or password' });
       }
 
       // Check if the password is correct
       const validPassword = await checkPassword(password, user.password);
       if (!validPassword) {
-        return res.status(400).json({ message: 'Invalid email or password' });
+        return res.status(400).json({ error: 'Invalid email or password' });
       }
 
       // Set up the user's session
@@ -71,7 +71,7 @@ const userController = {
         res.status(200).json({ message: 'User logged in successfully' });
       });
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
   },
 
