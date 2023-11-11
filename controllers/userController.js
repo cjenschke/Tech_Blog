@@ -11,30 +11,26 @@ const userController = {
   // Handle user registration
   registerUser: async (req, res) => {
     try {
-      // Extract user data from the request body
       const { username, email, password } = req.body;
 
-      // Check if the email is already registered
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
-        return res.status(400).json({ error: 'Email is already registered' });
+        res.status(400).json({ error: 'Email is already registered' });
+        return;
       }
 
-      // Hash the user's password before saving it
       const hashedPassword = await generateHash(password);
 
-      // Create a new user in the database
       const newUser = await User.create({
         username,
         email,
         password: hashedPassword,
       });
 
-      // Set up the user's session
       req.session.save(() => {
         req.session.user_id = newUser.id;
         req.session.logged_in = true;
-        res.status(201).json({ message: 'User registered successfully' });
+        res.redirect('/dashboard'); // Redirect to the dashboard after signup
       });
     } catch (err) {
       res.status(500).json({ error: 'Internal Server Error' });
@@ -49,26 +45,24 @@ const userController = {
   // Handle user login
   loginUser: async (req, res) => {
     try {
-      // Extract user data from the request body
       const { email, password } = req.body;
 
-      // Check if the email is registered
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return res.status(400).json({ error: 'Invalid email or password' });
+        res.status(400).json({ error: 'Invalid email or password' });
+        return;
       }
 
-      // Check if the password is correct
       const validPassword = await checkPassword(password, user.password);
       if (!validPassword) {
-        return res.status(400).json({ error: 'Invalid email or password' });
+        res.status(400).json({ error: 'Invalid email or password' });
+        return;
       }
 
-      // Set up the user's session
       req.session.save(() => {
         req.session.user_id = user.id;
         req.session.logged_in = true;
-        res.status(200).json({ message: 'User logged in successfully' });
+        res.redirect('/dashboard'); // Redirect to the dashboard after login
       });
     } catch (err) {
       res.status(500).json({ error: 'Internal Server Error' });
@@ -78,14 +72,12 @@ const userController = {
   // Display the user dashboard
   showDashboard: (req, res) => {
     if (!req.session.logged_in) {
-      return res.redirect('/login');
+      res.redirect('/login');
+      return;
     }
-
-    // Fetch additional user data later
 
     res.render('dashboard', {
       logged_in: req.session.logged_in,
-      // Add additional data later
     });
   },
 
@@ -93,7 +85,7 @@ const userController = {
   logoutUser: (req, res) => {
     if (req.session.logged_in) {
       req.session.destroy(() => {
-        res.redirect('/');
+        res.redirect('/'); // Redirect to the homepage after logout
       });
     } else {
       res.redirect('/login');

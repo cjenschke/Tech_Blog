@@ -25,37 +25,12 @@ router.post('/signup', userController.registerUser);
 router.get('/login', userController.showLoginForm);
 
 // Route for handling user login
-router.post('/login', async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    // Check if the email is registered
-    const user = await User.findOne({ where: { email } });
-    if (!user) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
-
-    // Check if the password is correct using passwordUtils
-    const validPassword = await checkPassword(password, user.password);
-    if (!validPassword) {
-      return res.status(400).json({ message: 'Invalid email or password' });
-    }
-
-    // Set up the user's session
-    req.session.save(() => {
-      req.session.user_id = user.id;
-      req.session.logged_in = true;
-      res.status(200).json({ message: 'User logged in successfully' });
-    });
-  } catch (err) {
-    res.status(500).json(err);
-  }
-});
+router.post('/login', userController.loginUser); // Changed to use controller's loginUser method
 
 // Route for displaying the user dashboard (protected route)
 router.get('/dashboard', withAuth, userController.showDashboard);
 
 // Route for handling user logout
-router.get('/logout', userController.logoutUser);
+router.get('/logout', userController.logoutUser); // Changed to use controller's logoutUser method
 
 module.exports = router;

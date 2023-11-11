@@ -4,7 +4,9 @@ const path = require('path');
 const exphbs = require('express-handlebars');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
-const { User, Post, Comment } = require('./models');
+
+// Ensure models are imported correctly
+const { Post, User, Comment } = require('./models');
 const routes = require('./routes');
 
 const app = express();
@@ -28,8 +30,22 @@ app.use(session(sess));
 // Serve static files (CSS, JS, etc.) from the 'public' directory
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Set up Handlebars as the view engine
-app.engine('handlebars', exphbs());
+// Set up Handlebars as the view engine with added options to allow prototype access
+const hbs = exphbs.create({
+  defaultLayout: 'main',
+  // Specify helpers which are only registered on this instance.
+  helpers: {
+    // Your helpers here if you have any
+  },
+  extname: '.handlebars',
+  // Add runtime options to disable the strict check
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+});
+
+app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 // Define a simple route
@@ -41,12 +57,15 @@ app.get('/', async (req, res) => {
     const posts = await Post.findAll({
       include: [
         { model: User, attributes: ['username'] },
-        { model: Comment, attributes: ['text', 'user_id'] },
+        { model: Comment, include: { model: User, attributes: ['username'] } },
       ],
     });
 
+    // Convert the Sequelize model instances to plain objects
+    const postsPlain = posts.map((post) => post.get({ plain: true }));
+
     // Render the home page view with the blog posts
-    res.render('home', { posts });
+    res.render('home', { posts: postsPlain });
   } catch (err) {
     console.error('Error fetching posts:', err);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -54,12 +73,18 @@ app.get('/', async (req, res) => {
 });
 
 // Use the routes defined in the separate file
+const userRoutes = require('./routes/userRoute');
+app.use(userRoutes);
+
 app.use(routes);
 
-// Sync Sequelize models with the database
-sequelize.sync({ force: false }).then(() => {
-  // Start the server after syncing models
-  app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
-  });
-});
+// Sync Sequelize models with the database and start the server
+(async () => {
+  try {
+    await sequelize.sync({ force: false });
+    console.log('Database synced');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  } catch (error) {
+    console.error('Unable to sync database:', error);
+  }
+})();

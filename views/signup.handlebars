@@ -1,37 +1,6 @@
 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign Up - Tech Blog</title>
-  <link rel="stylesheet" href="/public/css/style.css">
-</head>
-
-<body>
-  {{> header}}
-
-  <section class="container">
-    <h2>Sign Up</h2>
-    <form action="/user/signup" method="POST">
-    <!-- Add signup form fields (e.g., username, email, and password) -->
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required>
-
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-
-    <button type="submit">Sign Up</button>
-  </form>
-  </section>
-
-  {{> footer}}
-
-  <script src="/public/js/script.js"></script>
-</body>
-
-</html>
+<form action="/signup" method="POST">
+  <input type="text" name="username" placeholder="Username" required>
+  <input type="password" name="password" placeholder="Password" required>
+  <button type="submit">Sign Up!</button>
+</form>

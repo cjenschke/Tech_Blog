@@ -6,15 +6,23 @@ const homeController = {
       const posts = await Post.findAll({
         include: [
           { model: User, attributes: ['username'] },
-          { model: Comment, attributes: ['text', 'user_id'] },
+          {
+            model: Comment,
+            include: { model: User, attributes: ['username'] },
+          },
         ],
       });
 
-      res.render('home', { posts });
+      // Convert the Sequelize response into a plain object
+      const postsPlain = posts.map((post) => post.get({ plain: true }));
+
+      res.render('home', {
+        posts: postsPlain,
+        loggedIn: req.session.loggedIn, // Pass loggedIn status to the view
+      });
     } catch (err) {
       console.error('Error in showHomePage:', err.message);
-      console.error('Stack trace:', err.stack);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).send(err.message);
     }
   },
 };
