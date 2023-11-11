@@ -16,6 +16,10 @@ const homeController = {
       // Render the home page view with the blog posts
       res.render('home', { posts });
     } catch (err) {
+      // Log the error details for debugging
+      console.error('Error in showHomePage:', err.message);
+      console.error('Stack trace:', err.stack);
+
       res.status(500).json({ error: 'Internal Server Error' });
     }
   },

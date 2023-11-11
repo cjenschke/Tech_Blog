@@ -1,8 +1,11 @@
 require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const path = require('path');
+const exphbs = require('express-handlebars');
 const sequelize = require('./config/connection');
+const SequelizeStore = require('connect-session-sequelize')(session.Store);
+const { User, Post, Comment } = require('./models');
 const userRoutes = require('./routes/userRoute');
 const postRoutes = require('./routes/postRoute');
 const homeRoutes = require('./routes/homeRoute');
@@ -10,12 +13,9 @@ const homeRoutes = require('./routes/homeRoute');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-console.log(sequelize);
-// ... Other middleware and configurations ...
-
 // Set up session middleware
 const sess = {
-  secret: 'supersecretsecret',
+  secret: 'Super secret secret',
   cookie: {
     maxAge: 24 * 60 * 60 * 1000,
   },
@@ -28,12 +28,31 @@ const sess = {
 
 app.use(session(sess));
 
-// Routes
-app.use('/user', userRoutes);
-app.use('/post', postRoutes);
-app.use('/home', homeRoutes);
+// Serve static files (CSS, JS, etc.) from the 'public' directory
+app.use(express.static(path.join(__dirname, 'public')));
 
-// ... Start the server ...
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+// Set up Handlebars as the view engine
+app.engine('handlebars', exphbs.engine);
+app.set('view engine', 'handlebars');
+console.log('Handlebars configuration:', exphbs);
+
+// Define a simple route
+app.get('/', async (req, res) => {
+  console.log('Accessing the root route');
+  const posts = await Post.findAll({
+    include: [
+      { model: User, attributes: ['username'] },
+      { model: Comment, attributes: ['text', 'user_id'] },
+    ],
+  });
+  console.log('Posts:', posts);
+  res.render('home', { posts });
+});
+
+// Sync Sequelize models with the database
+sequelize.sync({ force: false }).then(() => {
+  // Start the server after syncing models
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
 });

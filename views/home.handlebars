@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +16,7 @@
     {{#each posts}}
       <article>
         <h3>{{ this.title }}</h3>
-        <p>Author: {{ this.User.username }}</p>
+        <p>Author: {{ this.user.username }}</p>
         <p>{{ this.createdAt }}</p>
         <a href="/post/{{ this.id }}">Read More</a>
       </article>
@@ -25,6 +24,11 @@
   </section>
 
   {{> footer}}
+
+  <script>
+    console.log("Home Handlebars file is working!");
+    console.log("Posts:", {{ posts }});
+  </script>
 
   <script src="/public/js/script.js"></script>
 </body>
