@@ -1,36 +1,31 @@
 const router = require('express').Router();
 const userController = require('../controllers/userController');
-const { checkPassword } = require('../utility/passwordUtils');
 
 // Middleware to check if the user is logged in
-const withAuth = async (req, res, next) => {
-  try {
-    if (!req.session.logged_in) {
-      res.redirect('/login');
-    } else {
-      next();
-    }
-  } catch (err) {
-    res.status(500).json(err);
+const withAuth = (req, res, next) => {
+  if (!req.session.logged_in) {
+    res.redirect('/login');
+  } else {
+    next();
   }
 };
 
-// Route for displaying the registration form
-router.get('/signup', userController.showRegistrationForm);
+// Route for displaying the signup form
+router.get('/signup', userController.showSignupForm);
 
-// Route for handling user registration
-router.post('/signup', userController.registerUser);
+// Route for handling user signup
+router.post('/signup', userController.signupUser);
 
-// Route for displaying login form
+// Route for displaying the login form
 router.get('/login', userController.showLoginForm);
 
 // Route for handling user login
-router.post('/login', userController.loginUser); // Changed to use controller's loginUser method
+router.post('/login', userController.loginUser);
 
 // Route for displaying the user dashboard (protected route)
 router.get('/dashboard', withAuth, userController.showDashboard);
 
 // Route for handling user logout
-router.get('/logout', userController.logoutUser); // Changed to use controller's logoutUser method
+router.get('/logout', userController.logoutUser);
 
 module.exports = router;

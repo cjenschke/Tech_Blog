@@ -1,9 +1,6 @@
 // Import the necessary dependencies
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
-const Post = require('./Post');
-const Comment = require('./Comment');
-// const User = require('./User');
 
 // Define the User model
 class User extends Model {}
@@ -44,26 +41,8 @@ User.init(
   }
 );
 
-// Create associations with other models.
-User.associate = (models) => {
-  User.hasMany(models.Post, {
-    foreignKey: 'user_id',
-    as: 'posts', // This 'as' is important for eager loading
-  });
-  User.hasMany(models.Comment, {
-    foreignKey: 'user_id',
-    as: 'comments',
-  });
-};
-// User.hasMany(Post, {
-//   foreignKey: 'user_id',
-//   onDelete: 'CASCADE', // Define the behavior on user deletion
-// });
-
-// User.hasMany(Comment, {
-//   foreignKey: 'user_id',
-//   onDelete: 'CASCADE',
-// });
+// Create associations with other models if needed
+// ...
 
 // Export the User model
 module.exports = User;

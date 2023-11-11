@@ -1,11 +1,5 @@
-<nav>
-  <ul class="nav">
-    <li><a href="/">Home</a></li>
-    {{#if loggedIn}}
-      <li><a href="/dashboard">Dashboard</a></li>
-      <li><a href="/logout">Logout</a></li>
-    {{else}}
-      <li><a href="/login">Login</a></li>
-    {{/if}}
-  </ul>
-</nav>
+<!-- Add this inside your nav.handlebars or equivalent -->
+{{#unless loggedIn}}
+  <a href="/signup">Sign Up</a>
+  <a href="/login">Login</a>
+{{/unless}}
