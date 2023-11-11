@@ -1,36 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tech Blog</title>
-  <link rel="stylesheet" href="/public/css/style.css">
 </head>
-
 <body>
-  {{> header}}
-
-  <section class="container">
-    <h2>Latest Blog Posts</h2>
-    {{#each posts}}
-      <article>
-        <h3>{{ this.title }}</h3>
-        <p>Author: {{ this.user.username }}</p>
-        <p>{{ this.createdAt }}</p>
-        <a href="/post/{{ this.id }}">Read More</a>
-      </article>
-    {{/each}}
-  </section>
-
-  {{> footer}}
-
-  <script>
-    console.log("Home Handlebars file is working!");
-    console.log("Posts:", {{ posts }});
-  </script>
-
-  <script src="/public/js/script.js"></script>
+  <h1>Hello, World!</h1>
 </body>
-
 </html>

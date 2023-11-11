@@ -1,11 +1,8 @@
-// Import necessary dependencies
 const { Post, User, Comment } = require('../models');
 
 const homeController = {
-  // Display the home page with a list of blog posts
   showHomePage: async (req, res) => {
     try {
-      // Fetch all blog posts with associated user and comment data
       const posts = await Post.findAll({
         include: [
           { model: User, attributes: ['username'] },
@@ -13,13 +10,10 @@ const homeController = {
         ],
       });
 
-      // Render the home page view with the blog posts
       res.render('home', { posts });
     } catch (err) {
-      // Log the error details for debugging
       console.error('Error in showHomePage:', err.message);
       console.error('Stack trace:', err.stack);
-
       res.status(500).json({ error: 'Internal Server Error' });
     }
   },

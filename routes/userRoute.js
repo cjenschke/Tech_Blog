@@ -1,6 +1,4 @@
 const router = require('express').Router();
-// Import the user model
-const { User, Post, Comment } = require('../models');
 const userController = require('../controllers/userController');
 const { checkPassword } = require('../utility/passwordUtils');
 

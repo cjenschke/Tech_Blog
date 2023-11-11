@@ -1,14 +1,11 @@
-require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const exphbs = require('express-handlebars');
+exphbs = require('express-handlebars');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { User, Post, Comment } = require('./models');
-const userRoutes = require('./routes/userRoute');
-const postRoutes = require('./routes/postRoute');
-const homeRoutes = require('./routes/homeRoute');
+const routes = require('./routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -32,22 +29,32 @@ app.use(session(sess));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set up Handlebars as the view engine
-app.engine('handlebars', exphbs.engine);
+app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
-console.log('Handlebars configuration:', exphbs);
 
 // Define a simple route
 app.get('/', async (req, res) => {
   console.log('Accessing the root route');
-  const posts = await Post.findAll({
-    include: [
-      { model: User, attributes: ['username'] },
-      { model: Comment, attributes: ['text', 'user_id'] },
-    ],
-  });
-  console.log('Posts:', posts);
-  res.render('home', { posts });
+
+  try {
+    // Fetch all blog posts with associated user and comment data
+    const posts = await Post.findAll({
+      include: [
+        { model: User, attributes: ['username'] },
+        { model: Comment, attributes: ['text', 'user_id'] },
+      ],
+    });
+
+    // Render the home page view with the blog posts
+    res.render('home', { posts });
+  } catch (err) {
+    console.error('Error fetching posts:', err);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
+
+// Use the routes defined in the separate file
+app.use(routes);
 
 // Sync Sequelize models with the database
 sequelize.sync({ force: false }).then(() => {
