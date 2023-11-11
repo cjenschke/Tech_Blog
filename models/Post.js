@@ -47,11 +47,6 @@ Post.associate = (models) => {
     as: 'user',
   });
 
-  // Post.belongsTo(User, {
-  //   foreignKey: 'user_id',
-  //   as: 'author',
-  // });
-
   Post.hasMany(models.Comment, {
     foreignKey: 'post_id',
     as: 'comments',

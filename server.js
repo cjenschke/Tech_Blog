@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-exphbs = require('express-handlebars');
+const exphbs = require('express-handlebars');
 const sequelize = require('./config/connection');
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 const { User, Post, Comment } = require('./models');
@@ -26,7 +26,7 @@ const sess = {
 app.use(session(sess));
 
 // Serve static files (CSS, JS, etc.) from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
 // Set up Handlebars as the view engine
 app.engine('handlebars', exphbs());

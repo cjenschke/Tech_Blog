@@ -3,9 +3,28 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tech Blog</title>
+  <title>Your Tech Blog</title>
+  <link rel="stylesheet" type="text/css" href="/public/css/style.css">
 </head>
 <body>
-  <h1>Hello, World!</h1>
+  <h1>Your Tech Blog</h1>
+  <p>Welcome to the Tech Blog</p>
+
+  {{#each posts}}
+    <div class="post">
+      <h2>{{title}}</h2>
+      <p>{{content}}</p>
+      <p>Author: {{user.username}}</p>
+      
+      {{#each comments}}
+        <div class="comment">
+          <p>{{text}}</p>
+          <p>Comment by: {{user.username}}</p>
+        </div>
+      {{/each}}
+    </div>
+  {{/each}}
+
+  <script type="text/javascript" src="/public/js/script.js"></script>
 </body>
 </html>
