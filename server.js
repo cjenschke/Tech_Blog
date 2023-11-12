@@ -9,9 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 3001;
 
 // Import your route files
-const homeRoutes = require('./routes/homeRoutes');
-const postRoutes = require('./routes/postRoutes');
-const userRoutes = require('./routes/userRoutes');
+const homeRoute = require('./routes/homeRoute');
+const postRoute = require('./routes/postRoute');
+const userRoute = require('./routes/userRoute');
 
 // Configure Handlebars as the view engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -33,9 +33,9 @@ app.use(
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set up routes
-app.use('/', homeRoutes);
-app.use('/posts', postRoutes);
-app.use('/users', userRoutes);
+app.use('/', homeRoute);
+app.use('/posts', postRoute);
+app.use('/users', userRoute);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
