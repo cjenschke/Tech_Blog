@@ -3,10 +3,14 @@ const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const exphbs = require('express-handlebars');
+require('dotenv').config();
 
 // Create the Express app
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+// Set the views directory
+app.set('views', path.join(__dirname, 'views'));
 
 // Import your route files
 const homeRoute = require('./routes/homeRoute');

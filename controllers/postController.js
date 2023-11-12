@@ -1,26 +1,30 @@
-// Import necessary dependencies
-const { Post, User, Comment } = require('../models');
-
 const postController = {
-  // Display a single blog post with comments
-  showPost: async (req, res) => {
-    try {
-      // Fetch the requested blog post with associated user and comment data
-      const post = await Post.findByPk(req.params.id, {
-        include: [
-          { model: User, attributes: ['username'] },
-          { model: Comment, attributes: ['text', 'user_id'] },
-        ],
-      });
-      if (!post) {
-        return res.status(404).json({ error: 'Post not found' });
-      }
-
-      // Render the post view with the selected blog post
-      res.render('post', { post });
-    } catch (err) {
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+  getAllPosts: (req, res) => {
+    // Handle logic for retrieving all posts
+    res.send('Get all posts');
+  },
+  getPostById: (req, res) => {
+    // Handle logic for retrieving a specific post by ID
+    const postId = req.params.id;
+    res.send(`Get post with ID ${postId}`);
+  },
+  createPost: (req, res) => {
+    // Handle logic for creating a new post
+    const { title, content } = req.body;
+    res.send(`Create a new post with title ${title} and content ${content}`);
+  },
+  updatePost: (req, res) => {
+    // Handle logic for updating a specific post by ID
+    const postId = req.params.id;
+    const { title, content } = req.body;
+    res.send(
+      `Update post with ID ${postId} - New title: ${title}, New content: ${content}`
+    );
+  },
+  deletePost: (req, res) => {
+    // Handle logic for deleting a specific post by ID
+    const postId = req.params.id;
+    res.send(`Delete post with ID ${postId}`);
   },
 };
 

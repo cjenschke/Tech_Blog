@@ -1,5 +1,5 @@
 const express = require('express');
-const router = require.Router();
+const router = require('express').Router();
 
 router.get('/', (req, res) => {
   // Handle logic for retrieving all users

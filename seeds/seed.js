@@ -1,58 +1,37 @@
-// Import necessary dependencies
-const sequelize = require('../config/connection');
-const { User, Post, Comment } = require('../models');
+const sequelize = require('./config/connection');
+const { User, Post, Comment } = require('./models');
 
-// Data for seeding
-const userData = [
-  { username: 'user1', email: 'user1@example.com', password: 'password1' },
-  { username: 'user2', email: 'user2@example.com', password: 'password2' },
-  // Add more users as needed
-];
-
-const postData = [
-  { title: 'Post 1', content: 'Content for post 1' },
-  { title: 'Post 2', content: 'Content for post 2' },
-  // Add more posts as needed
-];
-
-const commentData = [
-  { text: 'Comment 1' },
-  { text: 'Comment 2' },
-  // Add more comments as needed
-];
-
-// Function to seed the database
 const seedDatabase = async () => {
+  await sequelize.sync({ force: true });
+
   try {
-    // Sync all models
-    await sequelize.sync({ force: true });
-
-    // Seed users
-    const users = await User.bulkCreate(userData, {
-      individualHooks: true,
-      returning: true,
-    });
-
-    // Seed posts
-    const posts = await Post.bulkCreate(postData);
-
-    // Seed comments
-    const comments = await Comment.bulkCreate(commentData);
-
-    // Set up associations
-    await Comment.bulkCreate([
-      { text: 'Comment 1', user_id: users[0].id, post_id: posts[0].id },
-      { text: 'Comment 2', user_id: users[1].id, post_id: posts[1].id },
-      // Add more comments as needed
+    // Create users
+    const users = await User.bulkCreate([
+      { username: 'user1', email: 'user1@example.com' },
+      { username: 'user2', email: 'user2@example.com' },
+      // Add more user data as needed
     ]);
 
-    console.log('Database seeded successfully!');
-    process.exit(0);
-  } catch (err) {
-    console.error('Error seeding database:', err);
-    process.exit(1);
+    // Create posts
+    const posts = await Post.bulkCreate([
+      { title: 'Post 1', content: 'Content for post 1', UserId: users[0].id },
+      { title: 'Post 2', content: 'Content for post 2', UserId: users[1].id },
+      // Add more post data as needed
+    ]);
+
+    // Create comments
+    await Comment.bulkCreate([
+      { content: 'Comment 1', UserId: users[0].id, PostId: posts[0].id },
+      { content: 'Comment 2', UserId: users[1].id, PostId: posts[1].id },
+      // Add more comment data as needed
+    ]);
+
+    console.log('Database seeded successfully');
+  } catch (error) {
+    console.error('Error seeding database:', error);
   }
+
+  process.exit(0);
 };
 
-// Call the seed function
 seedDatabase();
