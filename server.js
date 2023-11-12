@@ -1,57 +1,42 @@
 const express = require('express');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const exphbs = require('express-handlebars');
-const sequelize = require('./config/connection');
-const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
-// Set up session middleware
-const sess = {
-  secret: process.env.SESSION_SECRET, // Use an environment variable for the secret
-  cookie: {
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  },
-  resave: false,
-  saveUninitialized: true,
-  store: new SequelizeStore({
-    db: sequelize,
-  }),
-};
-
+// Create the Express app
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(session(sess));
+// Import your route files
+const homeRoutes = require('./routes/homeRoutes');
+const postRoutes = require('./routes/postRoutes');
+const userRoutes = require('./routes/userRoutes');
 
-// Serve static files from the 'public' directory
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static('public'));
-
-// Set up Handlebars as the view engine
-const hbs = exphbs.create({
-  defaultLayout: 'main',
-  helpers: {
-    // Define any Handlebars helpers you might have
-  },
-  extname: '.handlebars',
-  runtimeOptions: {
-    allowProtoPropertiesByDefault: true,
-    allowProtoMethodsByDefault: true,
-  },
-});
-
-app.engine('handlebars', hbs.engine);
+// Configure Handlebars as the view engine
+app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 
-// Add body-parsing middleware to parse JSON and urlencoded form data
-app.use(express.json());
+// Middleware
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(cookieParser());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
-// Import and use routes
-const routes = require('./routes');
-app.use(routes);
+// Set up static files
+app.use(express.static(path.join(__dirname, 'public')));
 
-// Sync Sequelize models with the database then start the server
-sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Set up routes
+app.use('/', homeRoutes);
+app.use('/posts', postRoutes);
+app.use('/users', userRoutes);
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
