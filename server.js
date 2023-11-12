@@ -16,6 +16,7 @@ app.set('views', path.join(__dirname, 'views'));
 const homeRoute = require('./routes/homeRoute');
 const postRoute = require('./routes/postRoute');
 const userRoute = require('./routes/userRoute');
+const authRoute = require('./routes/authRoute');
 
 // Configure Handlebars as the view engine
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }));
@@ -40,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', homeRoute);
 app.use('/posts', postRoute);
 app.use('/users', userRoute);
+app.use('/auth', authRoute);
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
