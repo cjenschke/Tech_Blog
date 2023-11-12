@@ -2,18 +2,10 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 
-// Signup route
-router.get('/signup', authController.getSignupForm);
+router.get('/login', authController.getLoginPage);
+router.post('/login', authController.login);
+router.get('/signup', authController.getSignupPage);
 router.post('/signup', authController.signup);
-
-// Login route
-router.get('/login', authController.getLoginForm);
-router.post('/login', authController.login); // Corrected route
-
-// Dashboard route
-router.get('/dashboard', authController.getDashboard);
-
-// Logout route
 router.get('/logout', authController.logout);
 
 module.exports = router;
