@@ -8,7 +8,10 @@ router.post('/signup', authController.signup);
 
 // Login route
 router.get('/login', authController.getLoginForm);
-router.post('/login', authController.login);
+router.post('/auth/login', authController.login);
+
+// Dashboard route
+router.get('/dashboard', authController.getDashboard);
 
 // Logout route
 router.get('/logout', authController.logout);

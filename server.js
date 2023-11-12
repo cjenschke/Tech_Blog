@@ -28,11 +28,17 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET,
+    secret: process.env.SESSION_SECRET || 'default_secret', // Added a default secret for safety
     resave: false,
     saveUninitialized: false,
   })
 );
+
+// Console log to check session details
+app.use((req, res, next) => {
+  console.log('Session Details:', req.session);
+  next();
+});
 
 // Set up static files
 app.use(express.static(path.join(__dirname, 'public')));
@@ -42,6 +48,13 @@ app.use('/', homeRoute);
 app.use('/posts', postRoute);
 app.use('/users', userRoute);
 app.use('/auth', authRoute);
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Unhandled error:', err);
+  res.status(500).send('Internal Server Error');
+});
+
 // Start the server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
