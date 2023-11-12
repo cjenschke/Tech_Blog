@@ -1,5 +1,9 @@
-<!-- Add this inside your nav.handlebars or equivalent -->
-{{#unless loggedIn}}
-  <a href="/signup">Sign Up</a>
-  <a href="/login">Login</a>
-{{/unless}}
+<nav class="nav">
+  <ul>
+    <li><a href="/">Home</a></li>
+    <li><a href="/posts">Posts</a></li>
+    <li><a href="/users">Users</a></li>
+    <li><a href="/auth/signup">Signup</a></li>
+    <li><a href="/auth/login">Login</a></li>
+  </ul>
+</nav>

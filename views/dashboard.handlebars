@@ -1,26 +1,33 @@
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Dashboard - Tech Blog</title>
-  <link rel="stylesheet" href="/public/css/style.css">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-
 <body>
-  {{> header}}
+  <header>
+    <h1>Welcome to the Dashboard</h1>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/posts">Posts</a></li>
+        <li><a href="/users">Users</a></li>
+        <li><a href="/auth/logout">Logout</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  <section class="container">
-    <h2>Your Dashboard</h2>
-    <p>Welcome to your dashboard, {{username}}!</p>
-    <!-- Add dashboard content here -->
-  </section>
+  <main>
+    <!-- Dashboard content goes here -->
+    <p>This is the dashboard page.</p>
+  </main>
 
-  {{> footer}}
+  <footer>
+    <p>&copy; {{currentYear}} My Website</p>
+  </footer>
 
-  <script src="/public/js/script.js"></script>
+  <script src="/js/dashboard.js"></script>
 </body>
-
 </html>
