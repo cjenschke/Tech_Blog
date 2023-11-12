@@ -1,31 +1,36 @@
-const router = require('express').Router();
-const userController = require('../controllers/userController');
+const express = require('express');
+const router = require.Router();
 
-// Middleware to check if the user is logged in
-const withAuth = (req, res, next) => {
-  if (!req.session.logged_in) {
-    res.redirect('/login');
-  } else {
-    next();
-  }
-};
+router.get('/', (req, res) => {
+  // Handle logic for retrieving all users
+  res.send('Get all users');
+});
 
-// Route for displaying the signup form
-router.get('/signup', userController.showSignupForm);
+router.get('/:id', (req, res) => {
+  // Handle logic for retrieving a specific user by ID
+  const userId = req.params.id;
+  res.send(`Get user with ID ${userId}`);
+});
 
-// Route for handling user signup
-router.post('/signup', userController.signupUser);
+router.post('/', (req, res) => {
+  // Handle logic for creating a new user
+  const { name, email } = req.body;
+  res.send(`Create a new user with name ${name} and email ${email}`);
+});
 
-// Route for displaying the login form
-router.get('/login', userController.showLoginForm);
+router.put('/:id', (req, res) => {
+  // Handle logic for updating a specific user by ID
+  const userId = req.params.id;
+  const { name, email } = req.body;
+  res.send(
+    `Update user with ID ${userId} - New name: ${name}, New email: ${email}`
+  );
+});
 
-// Route for handling user login
-router.post('/login', userController.loginUser);
-
-// Route for displaying the user dashboard (protected route)
-router.get('/dashboard', withAuth, userController.showDashboard);
-
-// Route for handling user logout
-router.get('/logout', userController.logoutUser);
+router.delete('/:id', (req, res) => {
+  // Handle logic for deleting a specific user by ID
+  const userId = req.params.id;
+  res.send(`Delete user with ID ${userId}`);
+});
 
 module.exports = router;
