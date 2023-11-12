@@ -31,53 +31,23 @@ const authController = {
     // Render the login form view
     res.render('login');
   },
+
   login: async (req, res) => {
     try {
-      const { email } = req.body;
-
-      // Simplified check: Just find the user by email without password verification
+      const { email, password } = req.body;
       const user = await User.findOne({ where: { email } });
 
-      if (user) {
+      if (user && (await user.isCorrectPassword(password))) {
         req.session.userId = user.id;
-        console.log('User found, session set, redirecting to dashboard');
         res.redirect('/dashboard');
       } else {
-        console.log('User not found, redirecting to login');
-        res.redirect('/login?error=user_not_found');
+        res.redirect('/login?error=invalid_credentials');
       }
     } catch (error) {
       console.error('Error in login:', error);
       res.status(500).send('Login error');
     }
   },
-
-  // login: async (req, res) => {
-  //   try {
-  //     // Extract login credentials from req.body
-  //     const { email, password } = req.body;
-
-  //     // Find the user by email
-  //     const user = await User.findOne({ where: { email } });
-
-  //     // Check if the user exists and the password is correct
-  //     if (user && (await user.isCorrectPassword(password))) {
-  //       // Set the user ID in the session
-  //       req.session.userId = user.id;
-
-  //       console.log('Redirecting to dashboard');
-  //       // Redirect to the dashboard
-  //       res.redirect('/dashboard');
-  //     } else {
-  //       console.log('Invalid credentials, redirecting to login');
-  //       // Redirect to the login page with an error message
-  //       res.redirect('/login?error=invalid_credentials');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error logging in:', error);
-  //     res.status(500).send('Error logging in');
-  //   }
-  // },
 
   logout: (req, res) => {
     try {

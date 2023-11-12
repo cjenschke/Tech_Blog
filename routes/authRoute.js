@@ -8,7 +8,7 @@ router.post('/signup', authController.signup);
 
 // Login route
 router.get('/login', authController.getLoginForm);
-router.post('/auth/login', authController.login);
+router.post('/login', authController.login); // Corrected route
 
 // Dashboard route
 router.get('/dashboard', authController.getDashboard);
