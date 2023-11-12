@@ -1,38 +1,21 @@
-const User = require('./User');
-const Post = require('./Post');
 const Comment = require('./Comment');
+const Post = require('./Post');
+const User = require('./User');
+const sequelize = require('../config/connection');
 
-// Setup associations
-User.hasMany(Post, {
-  foreignKey: 'user_id',
-  as: 'posts',
-});
-Post.belongsTo(User, {
-  foreignKey: 'user_id',
-  as: 'user',
-});
+// Define associations between models if needed
+// For example, if a Post has many Comments:
+// Post.hasMany(Comment, { foreignKey: 'postId' });
+// Comment.belongsTo(Post, { foreignKey: 'postId' });
 
-User.hasMany(Comment, {
-  foreignKey: 'user_id',
-  as: 'comments',
-});
-Comment.belongsTo(User, {
-  foreignKey: 'user_id',
-  as: 'user',
-});
+// Sync all models with the database
+(async () => {
+  try {
+    await sequelize.sync({ force: false });
+    console.log('Database synced successfully');
+  } catch (error) {
+    console.error('Error syncing database:', error);
+  }
+})();
 
-Post.hasMany(Comment, {
-  foreignKey: 'post_id',
-  as: 'comments',
-});
-Comment.belongsTo(Post, {
-  foreignKey: 'post_id',
-  as: 'post',
-});
-
-// Export the models
-module.exports = {
-  User,
-  Post,
-  Comment,
-};
+module.exports = { Comment, Post, User };
