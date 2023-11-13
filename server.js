@@ -32,11 +32,17 @@ app.use(
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Database
+const db = require('./models');
+
 // Routes
 app.use('/', homeRoute);
 app.use('/auth', authRoute);
 app.use('/dashboard', dashboardRoute);
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+// Sync database and start the server
+db.sequelize.sync({ force: false }).then(() => {
+  app.listen(PORT, () =>
+    console.log(`Server running on http://localhost:${PORT}`)
+  );
 });

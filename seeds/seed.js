@@ -1,20 +1,20 @@
 const Sequelize = require('sequelize');
 const User = require('../models/User');
 
-const sequelize = new Sequelize(
-  'your_database',
-  'your_username',
-  'your_password',
-  {
-    host: 'localhost',
-    dialect: 'mysql',
-  }
-);
+const sequelize = new Sequelize('techblog_db', 'root', 'U3hwdyi#', {
+  host: 'localhost',
+  dialect: 'mysql',
+});
 
 const seedUsers = async () => {
   try {
-    // Delete existing users
-    await User.destroy({ truncate: true });
+    // Fetch all existing users
+    const users = await User.findAll();
+
+    // Delete each user
+    for (const user of users) {
+      await user.destroy();
+    }
 
     // Create new users
     await User.bulkCreate([

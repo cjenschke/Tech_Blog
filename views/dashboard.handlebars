@@ -1,33 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <header>
-    <h1>Welcome to the Dashboard</h1>
-    <nav>
-      <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/posts">Posts</a></li>
-        <li><a href="/users">Users</a></li>
-        <li><a href="/auth/logout">Logout</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <!-- Dashboard content goes here -->
-    <p>This is the dashboard page.</p>
-  </main>
-
-  <footer>
-    <p>&copy; {{currentYear}} My Website</p>
-  </footer>
-
-  <script src="/css/script.js"></script>
-</body>
-</html>
+<h1>Dashboard</h1>
+{{#each posts as |post|}}
+  <div>
+    <h2>{{post.title}}</h2>
+    <p>{{post.content}}</p>
+    <!-- Add edit and delete buttons as needed -->
+  </div>
+{{/each}}

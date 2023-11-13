@@ -1,21 +1,40 @@
-const Comment = require('./Comment');
-const Post = require('./Post');
+const sequelize = require('../config/connection'); // Ensure this path is correct
+const Sequelize = require('sequelize');
+
 const User = require('./User');
-const sequelize = require('../config/connection');
+const Post = require('./Post'); // Assuming you have a Post model
+const Comment = require('./Comment'); // Assuming you have a Comment model
 
-// Define associations between models if needed
-// For example, if a Post has many Comments:
-// Post.hasMany(Comment, { foreignKey: 'postId' });
-// Comment.belongsTo(Post, { foreignKey: 'postId' });
+// Initialize models
+User.init(
+  {
+    // Define attributes as in your User model
+  },
+  { sequelize, modelName: 'User' }
+);
 
-// Sync all models with the database
-(async () => {
-  try {
-    await sequelize.sync({ force: false });
-    console.log('Database synced successfully');
-  } catch (error) {
-    console.error('Error syncing database:', error);
-  }
-})();
+Post.init(
+  {
+    // Define attributes as in your Post model
+  },
+  { sequelize, modelName: 'Post' }
+);
 
-module.exports = { Comment, Post, User };
+Comment.init(
+  {
+    // Define attributes as in your Comment model
+  },
+  { sequelize, modelName: 'Comment' }
+);
+
+// Associations
+User.hasMany(Post, { foreignKey: 'userId' });
+Post.belongsTo(User, { foreignKey: 'userId' });
+
+Post.hasMany(Comment, { foreignKey: 'postId' });
+Comment.belongsTo(Post, { foreignKey: 'postId' });
+
+User.hasMany(Comment, { foreignKey: 'userId' });
+Comment.belongsTo(User, { foreignKey: 'userId' });
+
+module.exports = { sequelize, User, Post, Comment };

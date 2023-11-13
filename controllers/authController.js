@@ -27,12 +27,14 @@ const authController = {
     res.render('signup');
   },
 
-  async signup(req, res) {
+  signup: async (req, res) => {
     try {
+      console.log(req.body); // Log the received data
       const { username, email, password } = req.body;
       const hashedPassword = await bcrypt.hash(password, 10);
+      console.log({ username, email, password: hashedPassword });
       await User.create({ username, email, password: hashedPassword });
-      res.redirect('/login');
+      res.redirect('/dashboard');
     } catch (error) {
       console.error('Signup error:', error);
       res.status(500).send('Error during signup');

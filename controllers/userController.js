@@ -10,15 +10,15 @@ const userController = {
   },
   createUser: (req, res) => {
     // Handle logic for creating a new user
-    const { name, email } = req.body;
-    res.send(`Create a new user with name ${name} and email ${email}`);
+    const { username, email } = req.body;
+    res.send(`Create a new user with name ${username} and email ${email}`);
   },
   updateUser: (req, res) => {
     // Handle logic for updating a specific user by ID
     const userId = req.params.id;
-    const { name, email } = req.body;
+    const { username, email } = req.body;
     res.send(
-      `Update user with ID ${userId} - New name: ${name}, New email: ${email}`
+      `Update user with ID ${userId} - New name: ${username}, New email: ${email}`
     );
   },
   deleteUser: (req, res) => {
